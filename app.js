@@ -16,8 +16,6 @@ const productSchema = mongoose.Schema(
       required: [true, "Please provide a valid name."],
       trim: true,
       unique: [true, "Name must be unique."],
-      minLength: [true, "Name must be at least  character"],
-      maxLength: [true, "Name must be less than 100 characters"],
     },
     description: {
       type: String,
@@ -39,7 +37,7 @@ const productSchema = mongoose.Schema(
     quantity: {
       type: Number,
       required: [true, "Please provide a valid quantity."],
-      min: [0, "Quantity can't be less than 1."],
+      min: [0, "Quantity can't be less than 0."],
       validate: {
         validator: function (value) {
           const isInteger = Number.isInteger(value);
@@ -76,7 +74,26 @@ const productSchema = mongoose.Schema(
   }
 );
 
+// Mongoose middlewarese for saving data
 
+// productSchema.pre("save", function (next) {
+//   console.log("Before saving data.");
+
+//   if (this.quantity == 0) {
+//     this.status = "out-of-stock";
+//     console.log(this.status);
+//   }
+//   next();
+// });
+
+// productSchema.post("save", function (doc, next) {
+//   console.log("After saving data.");
+//   next();
+// });
+
+// productSchema.methods.logger = function () {
+//   console.log(`Data saved for ${this.name}`);
+// };
 
 // Schema => Model => query
 const Product = mongoose.model("Product", productSchema);
@@ -84,18 +101,36 @@ const Product = mongoose.model("Product", productSchema);
 app.post("/api/v1/product", async (req, res, next) => {
   try {
     // Save and create
-    const result = await Product.create(req.body);
+    // const result = await Product.create(req.body);
 
-    // const product = new Product(req.body);
-    // if(product.quantity == 0){
-    //     product.status = 'out-of-stock';
-    // }
-    // const result2 = await product.save()
+    const product = new Product(req.body);
+    if(product.quantity == 0){
+        product.status = 'out-of-stock';
+    }
+    const result = await product.save()
 
     res.status(200).json({
       status: "success",
       message: "Data inserted successfully.",
       data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+// Get data
+app.get("/api/v1/product", async (req, res, next) => {
+  try {
+    const products = await Product.find({});
+
+    res.status(200).json({
+      status: "success",
+      message: "Data fetched successfully.",
+      data: products,
     });
   } catch (error) {
     res.status(400).json({
