@@ -1,43 +1,65 @@
-const Product = require('../models/Product');
-const { getProductsServices, createProductService } = require('../services/product.services');
+const Product = require("../models/Product");
+const {
+  getProductsServices,
+  createProductService,
+  updateProductService,
+} = require("../services/product.services");
 exports.getProducts = async (req, res, next) => {
-    try {
-      const products = await getProductsServices()
-  
-      res.status(200).json({
-        status: "success",
-        message: "Data fetched successfully.",
-        data: products,
-      });
-    } catch (error) {
-      res.status(400).json({
-        status: "error",
-        message: error.message,
-      });
-    }
-  }
+  try {
+    const products = await getProductsServices();
 
+    res.status(200).json({
+      status: "success",
+      message: "Data fetched successfully.",
+      data: products,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
 
 exports.createProduct = async (req, res, next) => {
-    try {
-      // Save and create
-      const result = await createProductService(req.body);
-  
+  try {
+    // Save and create
+    const result = await createProductService(req.body);
+
     //   const product = new Product(req.body);
     //   if(product.quantity == 0){
     //       product.status = 'out-of-stock';
     //   }
     //   const result = await product.save()
-  
-      res.status(200).json({
-        status: "success",
-        message: "Data inserted successfully.",
-        data: result,
-      });
-    } catch (error) {
-      res.status(400).json({
-        status: "error",
-        message: error.message,
-      });
-    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Data inserted successfully.",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Data is not inserted.",
+      error: error.message,
+    });
   }
+};
+
+exports.updateProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+   const result = await updateProductService(id, req.body)
+   res.status(200).json({
+    status: "success",
+         message: "Data updated successfully.",
+         data: result
+   })
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Couldn't update the product.",
+      error: error.message,
+    });
+  }
+};

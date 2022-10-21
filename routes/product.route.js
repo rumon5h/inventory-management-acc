@@ -5,4 +5,7 @@ router.route('/')
 .get(productControllers.getProducts)
 .post(productControllers.createProduct)
 
+router.route('/:id')
+.patch(productControllers.updateProduct)
+
 module.exports= router;
