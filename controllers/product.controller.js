@@ -3,6 +3,7 @@ const {
   getProductsServices,
   createProductService,
   updateProductService,
+  bulkUpdateProductService,
 } = require("../services/product.services");
 exports.getProducts = async (req, res, next) => {
   try {
@@ -50,6 +51,24 @@ exports.updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
    const result = await updateProductService(id, req.body)
+   res.status(200).json({
+    status: "success",
+         message: "Data updated successfully.",
+         data: result
+   })
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Couldn't update the product.",
+      error: error.message,
+    });
+  }
+};
+
+
+exports.bulkUpdateProduct = async (req, res, next) => {
+  try {
+   const result = await bulkUpdateProductService(req.body)
    res.status(200).json({
     status: "success",
          message: "Data updated successfully.",

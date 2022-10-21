@@ -12,5 +12,10 @@ exports.createProductService = async (data) => {
 }
 
 exports.updateProductService = async (id, data) => {
-    const result = await Product.updateOne({ _id: id }, { $set: data });
+    const result = await Product.updateOne({ _id: id }, { $set: data }, {runValidators: true});
+}
+
+exports.bulkUpdateProductService = async (data) => {
+    const result = await Product.updateMany({_id: data.ids},data.data, { runValidators: true });
+    return result;
 }
