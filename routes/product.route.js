@@ -5,10 +5,11 @@ router.route('/')
 .get(productControllers.getProducts)
 .post(productControllers.createProduct)
 
-router.route('/bulk-update').patch(productControllers.bulkUpdateProduct);
+router.route('/bulk-update').patch(productControllers.bulkUpdateProductById);
 
 router.route('/:id')
-.patch(productControllers.updateProduct);
+.patch(productControllers.updateProductById)
+.delete(productControllers.deleteProductById)
 
 
 
