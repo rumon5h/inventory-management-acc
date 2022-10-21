@@ -67,7 +67,6 @@ exports.updateProductById = async (req, res, next) => {
   }
 };
 
-
 exports.bulkUpdateProductById = async (req, res, next) => {
   try {
    const result = await bulkUpdateProductService(req.body)
@@ -107,6 +106,7 @@ exports.bulkDeleteProductById = async (req, res, next) => {
   try {
     
    const result = await bulkDeleteProductService(req.body.ids)
+   console.log(result);
    res.status(200).json({
     status: "success",
          message: "Data updated successfully.",

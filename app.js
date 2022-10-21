@@ -15,5 +15,7 @@ app.use("/api/v1/product", productRoute);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-
+app.get('*', (req, res) => {
+  res.send("Route not found!");
+})
 module.exports = app;
